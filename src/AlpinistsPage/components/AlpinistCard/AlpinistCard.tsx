@@ -3,11 +3,11 @@ import './AlpinistCard.css'
 // import DeleteButton from "../DeleteButton/DeleteButton.tsx";
 import {Link} from "react-router-dom";
 // @ts-ignore
-import kukuczka from  "../../../models/mock/kukuczka.png"
+import kukuczka from  "/public/kukuczka.png"
 // @ts-ignore
-import messner from  "../../../models/mock/messner.png"
+import messner from  "/public/messner.png"
 // @ts-ignore
-import erhard from  "../../../models/mock/erhard.jpeg"
+import erhard from  "/public/erhard.jpeg"
 
 interface Props {
     id: number
@@ -21,10 +21,9 @@ interface Props {
 const AlpinistCard: FC<Props> = ({id, country, lifetime, imageRef, name}) => (
     <div className="my-card-wrapper">
         <article className="my-card">
-            <div className="my-card__img" style={{backgroundImage: `url(${imageRef})`}}></div>
+            <div className="my-card__img" style={{backgroundImage: `${imageRef}`}}></div>
             <Link to={"/rip_front/alpinist/" + id} className="my-card_link">
                 <div className="my-card__img--hover" style={{backgroundImage: `url(${imageRef})`}}></div>
-                <div>erhard</div>
             </Link>
             <div className="my-card__info">
                 <span className="my-card__category">{country}</span>
