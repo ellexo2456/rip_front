@@ -1,52 +1,80 @@
-import { Navbar } from 'react-bootstrap';
-import Breadcrumbs from './Breadcrumbs';
+import { Button, Navbar } from "react-bootstrap";
+import Breadcrumbs from "./Breadcrumbs";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
-import NavDropdown from "react-bootstrap/NavDropdown";
-import "./header.css"
-import { Link } from "react-router-dom";
-import { NavLink } from 'react-router-dom';
+import "./header.css";
+import { Link, useLocation } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import { useSelector } from "./core/store";
+import { selectUser } from "./core/store/slices/selectors";
+import { logout } from "./core/api/auth";
 
 const Header: React.FC = () => {
+  const location = useLocation();
 
-    return (
-        <Navbar expand="lg" className="bg-warning-subtle">
-            <Container>
-                <Navbar.Brand>
-                    <Link to={"/rip_front"}>
-                        AlpLib
-                    </Link>
-                </Navbar.Brand>
-                <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                <Navbar.Collapse id="basic-navbar-nav">
-                    <Nav className="me-auto">
-                        {/*<Nav.Link href="#home">Home</Nav.Link>*/}
-                        {/*<Nav.Link href="#link">Link</Nav.Link>*/}
-                        <NavDropdown
-                            title="Меню"
-                            id="basic-nav-dropdown"
-                            style={{
-                                display: "flex",
-                                flexDirection: "column",
-                            }}
-                        >
-                            <NavLink className="dropdown-item" to="/rip_front/login">Логин</NavLink>
-                            <NavLink className="dropdown-item" to="/rip_front/register">Регистрация</NavLink>
-                            <NavLink className="dropdown-item" to="/rip_front/missions">Миссии</NavLink>
-                            <NavLink className="dropdown-item" to="/rip_front/history">История</NavLink>
-                        </NavDropdown>
-                    </Nav>
-                </Navbar.Collapse>
+  const { isAuth, expeditionId } = useSelector(selectUser);
+  console.log("*", expeditionId, "*");
 
-                <Navbar.Collapse id="basic-navbar-nav" className={"d-flex justify-content-end"}>
-                    <Nav className="pt-3">
-                        <Breadcrumbs />
-                    </Nav>
+  return (
+    <Navbar expand="sm" className="bg-warning-subtle">
+      <Container>
+        <Navbar.Brand>
+          <Link to={"/rip_front"}>AlpLib</Link>
+        </Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="me-auto gap-2">
+            {!isAuth ? (
+              <>
+                <NavLink className="dropdown-item" to="/rip_front/login">
+                  Логин
+                </NavLink>
+                <NavLink className="dropdown-item" to="/rip_front/register">
+                  Регистрация
+                </NavLink>
+              </>
+            ) : (
+              <Button style={{ width: "min-content" }} onClick={logout}>
+                Выйти
+              </Button>
+            )}
+            {isAuth && (
+              <div
+                style={{ display: "flex", alignItems: "center", gap: "8px" }}
+              >
+                <NavLink className="dropdown-item" to="/rip_front/history">
+                  История
+                </NavLink>
+                {location.pathname === "/rip_front" &&
+                  expeditionId.length !== 0 &&
+                  (expeditionId ? (
+                    <NavLink
+                      className="dropdown-item m-0 p-0"
+                      to={`/rip_front/missions/${expeditionId}`}
+                    >
+                      Экспедиция
+                    </NavLink>
+                  ) : (
+                    <p style={{ margin: "0", opacity: "50%" }}>Экспедиция</p>
+                  ))}
+              </div>
+            )}
+          </Nav>
+        </Navbar.Collapse>
 
-                </Navbar.Collapse>
-            </Container>
-        </Navbar>
-    );
+        <Navbar.Collapse
+          id="basic-navbar-nav"
+          className={"d-flex justify-content-end"}
+        >
+          {location.pathname.startsWith("/rip_front/alpinist/") && (
+            <Nav className="pt-3">
+              <Breadcrumbs />
+            </Nav>
+          )}
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
+  );
 };
 
 export default Header;

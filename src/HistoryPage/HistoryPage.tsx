@@ -1,56 +1,70 @@
+import "./index.css";
 import React, { useEffect, useState } from "react";
-import { api } from "../api/config";
-import { Container } from "react-bootstrap";
-
-interface User {
-    id: number,
-    Email: string,
-}
-
-interface Expedition {
-    id: number,
-    name: string,
-    status: string,
-    user: User,
-    year: number,
-}
+import { Table } from "react-bootstrap";
+import { getExpeditions } from "../core/api/expedition";
+import { IExpedition } from "../core/api/expedition/typing";
+import { useNavigate } from "react-router-dom";
 
 export const HistoryPage = () => {
-    const [expeditions, setExpeditions] = useState<Expedition[] | undefined>(undefined);
+  const [expeditions, setExpeditions] = useState<IExpedition[] | undefined>(
+    undefined
+  );
 
-    useEffect(() => {
-        api.get(`/api/expedition/filter`)
-            .then(response => {
-                if (response.status === 200) {
-                    setExpeditions(response.data.expedition);
-                }
-            })
-            .catch(error => {
-                console.error(error);
-            })
-    }, [])
+  const navigate = useNavigate();
 
-    return (
-        <Container>
-            {expeditions !== undefined && expeditions.map(expedition => (
-                <div key={expedition.id} style={{ display: "flex", flexDirection: "row", width: "100%", "justifyContent": "space-between", backgroundColor: "#D2DBDD", padding: "10px", borderRadius: "10px", marginTop: "20px" }}>
-                    <div style={{ display: "flex", flexDirection: "column", alignItems: "start" }}>
-                        <h3>Название: {expedition.name}</h3>
-                        <p>Год: {expedition.year}</p>
-                    </div>
-                    <div style={{ display: "flex", flexDirection: "column", alignItems: "end" }}>
-                        <p>Почта: {expedition.user.Email}</p>
-                        <p>Статус: {expedition.status}</p>
-                        {/* <Button
-                            variant='danger'
-                            onClick={() => {handleDeleteMission(expedition.id)}}
-                        >
-                            Удалить
-                        </Button> */}
-                    </div>
-                </div>
-            ))}
-            {/* <Button style={{ marginTop: "10px" }} onClick={handleSubmitMissions}>Оформить миссии</Button> */}
-        </Container>
-    )
-}
+  useEffect(() => {
+    getExpeditions().then((data) => setExpeditions(data.expedition));
+  }, []);
+
+  const formatDateTime = (dateTimeString: string) => {
+    const options = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      second: "numeric",
+    } as const;
+    return new Date(dateTimeString).toLocaleDateString("ru-US", options);
+  };
+
+  return (
+    <div className="history_page">
+      <h1>История Экспедиций</h1>
+      <Table striped bordered hover size="sm" className="history_table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Название</th>
+            <th>Год</th>
+            <th>Статус</th>
+            <th>Создание</th>
+            <th>Формирование</th>
+            <th>Завершение</th>
+          </tr>
+        </thead>
+        <tbody>
+          {expeditions &&
+            expeditions.length &&
+            expeditions.map((exp, index) => {
+              return (
+                <tr
+                  key={index}
+                  onClick={() => navigate(`/rip_front/missions/${exp.id}`)}
+                  style={{cursor: "pointer"}}
+                >
+                  <td>{index + 1}</td>
+                  <td>{exp.name}</td>
+                  <td>{exp.year}</td>
+                  <td>{exp.status}</td>
+                  <td>{formatDateTime(exp.createdAt)}</td>
+                  <td>{formatDateTime(exp.formedAt)}</td>
+                  <td>{formatDateTime(exp.closedAt)}</td>
+                </tr>
+              );
+            })}
+        </tbody>
+      </Table>
+    </div>
+  );
+};

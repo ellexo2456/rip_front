@@ -2,7 +2,6 @@ import React from 'react';
 import { Breadcrumb } from 'react-bootstrap';
 import { Link, useLocation } from 'react-router-dom';
 import './Breadcrumbs.css'
-import {getAlpinistById} from "./AlpinistPage/modules/get-alpinist-by-id.ts";
 
 const Breadcrumbs: React.FC = () => {
     const location = useLocation();
@@ -19,10 +18,6 @@ const Breadcrumbs: React.FC = () => {
                 }
                 const routeTo = `/${pathnames.slice(0, index + 1).join('/')}`;
                 const isLast = index === pathnames.length - 1;
-
-                if (name == 'alpinist') {
-                    getAlpinistById(pathnames[index + 1])
-                }
 
                 return isLast || name == 'alpinist' ? (
                     <Breadcrumb.Item active key={name}>
