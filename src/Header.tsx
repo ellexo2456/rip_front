@@ -21,7 +21,7 @@ const Header: React.FC = () => {
                     <Nav className="me-auto">
                         {/*<Nav.Link href="#home">Home</Nav.Link>*/}
                         {/*<Nav.Link href="#link">Link</Nav.Link>*/}
-                        <NavDropdown title="Menu" id="basic-nav-dropdown">
+                        <NavDropdown title="Меню" id="basic-nav-dropdown">
                             {/*<NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>*/}
                             {/*<NavDropdown.Item href="#action/3.2">*/}
                             {/*    Another action*/}
