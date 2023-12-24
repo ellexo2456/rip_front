@@ -2,6 +2,8 @@ import {FC} from 'react'
 import './AlpinistCard.css'
 // import DeleteButton from "../DeleteButton/DeleteButton.tsx";
 import {Link} from "react-router-dom";
+// @ts-ignore
+import kukuczka from  "../../../models/mock/kukuczka.png"
 
 interface Props {
     id: number
