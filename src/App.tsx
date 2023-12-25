@@ -24,9 +24,7 @@ const App: React.FC = () => {
     <Provider store={store}>
       <Router>
         <Header></Header>
-        {(location.pathname.startsWith("/rip_front/alpinist/")  location.pathname == "/rip_front/alpinist/") && (
           <Breadcrumbs />
-        )}
         <Routes>
           <Route path="/" element={<MainLayout />}>
             <Route path="/rip_front" element={<AlpinistsPage />} />
