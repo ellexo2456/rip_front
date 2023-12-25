@@ -1,5 +1,4 @@
 import { Button, Navbar } from "react-bootstrap";
-import Breadcrumbs from "./Breadcrumbs";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import "./header.css";
@@ -62,19 +61,15 @@ const Header: React.FC = () => {
           </Nav>
         </Navbar.Collapse>
 
-        <Navbar.Collapse
-          id="basic-navbar-nav"
-          className={"d-flex justify-content-end"}
-        >
-          {location.pathname.startsWith("/rip_front/alpinist/") && (
-            <Nav className="pt-3">
-              <Breadcrumbs />
-            </Nav>
-          )}
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
-  );
+                {/*<Navbar.Collapse id="basic-navbar-nav" className={"d-flex justify-content-end"}>*/}
+                {/*    <Nav className="pt-3">*/}
+                {/*        <Breadcrumbs/>*/}
+                {/*    </Nav>*/}
+
+                {/*</Navbar.Collapse>*/}
+            </Container>
+        </Navbar>
+    );
 };
 
 export default Header;

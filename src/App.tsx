@@ -12,6 +12,8 @@ import { store } from "./core/store/index.ts";
 import { MainLayout } from "./components/MainLayout/index.tsx";
 import { getExpeditions } from "./core/api/expedition/index.ts";
 import { saveAuth } from "./core/store/slices/userSlice.ts";
+import Breadcrumbs from "./Breadcrumbs.tsx";
+
 const App: React.FC = () => {
   useEffect(() => {
     getExpeditions().then(() => store.dispatch(saveAuth(true)));
@@ -21,6 +23,9 @@ const App: React.FC = () => {
     <Provider store={store}>
       <Router>
         <Header></Header>
+        {location.pathname.startsWith("/rip_front/alpinist/") && (
+          <Breadcrumbs />
+        )}
         <Routes>
           <Route path="/" element={<MainLayout />}>
             <Route path="/rip_front" element={<AlpinistsPage />} />

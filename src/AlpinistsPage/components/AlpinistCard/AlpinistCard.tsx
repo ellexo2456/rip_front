@@ -1,7 +1,13 @@
 import { Dispatch, FC } from "react";
 import "./AlpinistCard.css";
 // import DeleteButton from "../DeleteButton/DeleteButton.tsx";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
+// @ts-ignore
+import kukuczka from  "/public/kukuczka.png"
+// @ts-ignore
+import messner from  "/public/messner.png"
+// @ts-ignore
+import erhard from  "/public/erhard.jpeg"
 import { Button } from "react-bootstrap";
 import { api } from "../../../api/config";
 import { IAppData, addNotification } from "../../../core/store/slices/appSlice";
