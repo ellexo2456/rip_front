@@ -9,6 +9,7 @@
 .content__wrapper {
     max-width: 1000px;
     margin: 40px auto;
+    margin-left: 160px;
     font-size: 15px;
 }
 

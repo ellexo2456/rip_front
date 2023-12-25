@@ -9,7 +9,7 @@
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 5px 13px 10px -7px rgba(0, 0, 0, 0.1);
-    max-width: 250px;
+    max-width: 300px;
     flex-wrap: wrap;
     min-height: 95%;
 }
@@ -102,4 +102,13 @@
     font-weight: lighter;
     text-decoration: none;
     color: #AD7D52;
+}
+
+.my-card__add-button {
+    margin-top: 30px;
+    display: flex;
+    width: 100%;
+    justify-items: center;
+    text-align: center;
+    padding-left: 26px;
 }
