@@ -46,7 +46,10 @@ export const ExpPage: FC<ExpPageProps> = (props) => {
             >
               <div className="input_element">
                 <h3>Название:</h3>
-                <p>{expedition.name}</p>
+                <div style={{
+                    display: "flex",
+                    alignItems: "center",
+                }}>{expedition.name}</div>
               </div>
               <div className="input_element">
                 <p>Год:</p>

@@ -1,5 +1,5 @@
 import "./index.css";
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectUser } from "../core/store/slices/selectors";
 import { getExpeditionById } from "../core/api/expedition";

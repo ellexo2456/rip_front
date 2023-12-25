@@ -5,7 +5,7 @@ a {
 
 .bread-crumbs_container {
     display: flex;
-    justify-content: end;
-    margin-right: 50px;
+    justify-content: start;
+    margin-left: 50px;
     margin-top: 15px
 }

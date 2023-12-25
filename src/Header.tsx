@@ -45,8 +45,8 @@ const Header: React.FC = () => {
                   История
                 </NavLink>
                 {location.pathname === "/rip_front" &&
-                  expeditionId.length !== 0 &&
-                  (expeditionId ? (
+                  (location.pathname === "/rip_front" &&
+                  expeditionId.length !== 0 && expeditionId ? (
                     <NavLink
                       className="dropdown-item m-0 p-0"
                       to={`/rip_front/missions/${expeditionId}`}

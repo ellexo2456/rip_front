@@ -1,5 +1,5 @@
 import "./index.css";
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { Table } from "react-bootstrap";
 import { getExpeditions } from "../core/api/expedition";
 import { IExpedition } from "../core/api/expedition/typing";
@@ -13,7 +13,7 @@ export const HistoryPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    getExpeditions().then((data) => setExpeditions(data.expedition));
+    getExpeditions().then((data) => setExpeditions(data.expedition.filter((exp ) => exp.status !== "черновик")));
   }, []);
 
   const formatDateTime = (dateTimeString: string) => {
