@@ -14,6 +14,7 @@ import { getExpeditions } from "./core/api/expedition/index.ts";
 import { saveAuth } from "./core/store/slices/userSlice.ts";
 import Breadcrumbs from "./Breadcrumbs.tsx";
 
+
 const App: React.FC = () => {
   useEffect(() => {
     getExpeditions().then(() => store.dispatch(saveAuth(true)));
@@ -23,7 +24,7 @@ const App: React.FC = () => {
     <Provider store={store}>
       <Router>
         <Header></Header>
-        {location.pathname.startsWith("/rip_front/alpinist/") && (
+        {(location.pathname.startsWith("/rip_front/alpinist/")  location.pathname == "/rip_front/alpinist/") && (
           <Breadcrumbs />
         )}
         <Routes>
