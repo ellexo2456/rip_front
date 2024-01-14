@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export const Roles = { USER: 1, ADMIN: 2};
+export const Role = { USER: 1, ADMIN: 2};
 
 export interface IUser {
   userName: string;

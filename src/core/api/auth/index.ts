@@ -90,3 +90,19 @@ export const logout = async () => {
         throw error;
     }
 };
+
+export const getRole = async () => {
+    try {
+        const response: IGetUserRole = responseBody(await authApi.get("/role"));
+        store.dispatch(saveUserRole(response.role));
+        // store.dispatch(refreshApp());
+        // store.dispatch(refreshUser());
+    } catch (error) {
+        if (isAxiosError(error)) {
+            console.log("error message: ", error.message);
+        } else {
+            console.log("unexpected error: ", error);
+        }
+        throw error;
+    }
+};
