@@ -24,7 +24,7 @@ export const ExpeditionPage = () => {
     undefined
   );
   const { id } = useParams();
-  const { expeditionId } = useSelector(selectUser);
+  const { expeditionId} = useSelector(selectUser);
 
   console.log(id, expeditionId);
 

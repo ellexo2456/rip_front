@@ -19,7 +19,7 @@ const AlpinistsPage: FC = () => {
 
   const dispatch = useDispatch();
   const { searchName } = useSelector(selectApp);
-  const { isAuth } = useSelector(selectUser);
+  const { isAuth, role} = useSelector(selectUser);
 
   const handleSearch = async () => {
     setLoading(true);
@@ -44,34 +44,37 @@ const AlpinistsPage: FC = () => {
 
       <div className={`my-container ${loading && "containerLoading"}`}>
         {loading && (
-          <div className="loadingBg">
-            <Spinner animation="border" />
-          </div>
+            <div className="loadingBg">
+              <Spinner animation="border"/>
+            </div>
         )}
 
         <InputField
-          value={searchName}
-          setValue={(value) => dispatch(saveSearchName(value))}
-          loading={loading}
-          onSubmit={handleSearch}
+            value={searchName}
+            setValue={(value) => dispatch(saveSearchName(value))}
+            loading={loading}
+            onSubmit={handleSearch}
         />
 
         {!alpinists.length && (
-          <div>
-            <h1>К сожалению, пока ничего не найдено :(</h1>
-          </div>
+            <div>
+              <h1>К сожалению, пока ничего не найдено :(</h1>
+            </div>
         )}
 
+        <div>
+          {role}
+        </div>
         <Row xs={4} md={4} className="g-4">
           {alpinists.map((item, index) => (
-            <Col key={index}>
-              <AlpinistCard
-                {...item}
-                isAuth={isAuth}
-                dispatch={dispatch}
-                handler={handleSearch}
-              />
-            </Col>
+              <Col key={index}>
+                <AlpinistCard
+                    {...item}
+                    isAuth={isAuth}
+                    dispatch={dispatch}
+                    handler={handleSearch}
+                />
+              </Col>
           ))}
         </Row>
       </div>
