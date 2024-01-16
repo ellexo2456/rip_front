@@ -28,12 +28,16 @@ export const AlpinistEditPage: FC = () => {
     const [name, setName] = useState("")
     const [country, setCountry] = useState("")
     const [lifetime, setLifetime] = useState("")
+    const [birthDate, setBirthDate] = useState("")
+    const [deathDate, setDeathDate] = useState("")
     const [descr, setDescr] = useState("")
     const [image, setImage] = useState<File | null>(null);
 
     // const { alpinist, setAlpinist, requestHandler } = props;
     // const [yearError, setYearError] = useState(false);
     const [nameError, setNameError] = useState(false);
+    const [birthDateError, setBirthDateError] = useState(false);
+    const [deathDateError, setDeathDateError] = useState(false);
     const navigate = useNavigate();
     const {id} = useParams();
 
@@ -70,6 +74,33 @@ export const AlpinistEditPage: FC = () => {
             setNameError(true);
             isValid = false;
         }
+
+        if (!birthDate && deathDate) {
+            setBirthDateError(true);
+            isValid = false;
+        }
+
+        const bd = new Date(birthDate)
+        const dd = new Date(deathDate)
+        if (bd >= dd) {
+            setBirthDateError(true);
+            isValid = false;
+        }
+        const td = new Date();
+        const ld = new Date("1200-01-01");
+
+        if (bd) {
+            if (bd <= ld || bd >= td) {
+                setBirthDateError(true);
+                isValid = false;
+            }
+        }
+        if (dd) {
+            if ((dd <= ld || dd >= td) && dd) {
+                setDeathDateError(true);
+                isValid = false;
+            }
+        }
         return isValid;
     };
 
@@ -80,21 +111,38 @@ export const AlpinistEditPage: FC = () => {
                     await addAlpinistImage(image, Number(id));
                 }
 
+                let bd = "";
+                let dd = "";
+                if (birthDate) {
+                    bd = birthDate.replace(/-/g, ".")
+                }
+                if (deathDate) {
+                    dd = deathDate.replace(/-/g, ".")
+                }
+
                 await changeAlpinistById({
                     id: Number(id),
                     name: name,
                     country: country,
                     description: descr,
-                    lifetime: lifetime,
+                    lifetime: bd + " - " + dd,
                 })
 
                 navigate(`/rip_front/alpinists/editable`);
             } else {
+                let bd = "";
+                let dd = "";
+                if (birthDate) {
+                    bd = birthDate.replace(/-/g, ".")
+                }
+                if (deathDate) {
+                    dd = deathDate.replace(/-/g, ".")
+                }
                 const resp = await createAlpinist({
                     name: name,
                     country: country,
                     description: descr,
-                    lifetime: lifetime,
+                    lifetime: bd + " - " + dd,
                 })
 
                 if (image) {
@@ -122,8 +170,14 @@ export const AlpinistEditPage: FC = () => {
     const handleChangeDescr = (e: React.ChangeEvent<HTMLInputElement>) => {
         setDescr(e.target.value)
     };
-    const handleChangeLifetime = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setLifetime(e.target.value)
+    const handleChangeBirthDate = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setBirthDateError(false);
+        setBirthDate(e.target.value);
+    };
+    const handleChangeDeathDate = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setBirthDateError(false);
+        setDeathDateError(false);
+        setDeathDate(e.target.value);
     };
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -147,8 +201,17 @@ export const AlpinistEditPage: FC = () => {
                 </Form.Group>
 
                 <Form.Group className="mb-3">
-                    <Form.Label>Время жизни</Form.Label>
-                    <Form.Control type="text" defaultValue={lifetime} onChange={handleChangeLifetime}/>
+                    <Form.Label>Дата рождения</Form.Label>
+                    <Form.Control type="date" style={{border: birthDateError ? "2px solid red" : ""}}
+                                  defaultValue={(lifetime.split("-"))[0]?.replace(/\./g, "-").trim()}
+                                  onChange={handleChangeBirthDate}/>
+                </Form.Group>
+
+                <Form.Group className="mb-3">
+                    <Form.Label>Дата смерти</Form.Label>
+                    <Form.Control type="date" style={{border: deathDateError ? "2px solid red" : ""}}
+                                  defaultValue={(lifetime.split("-"))[1]?.replace(/\./g, "-").trim()}
+                                  onChange={handleChangeDeathDate}/>
                 </Form.Group>
 
                 <Form.Group className="mb-3">

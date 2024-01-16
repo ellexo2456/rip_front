@@ -8,9 +8,10 @@ import {useSelector} from "./core/store";
 import {selectUser} from "./core/store/slices/selectors";
 import {logout} from "./core/api/auth";
 
+
 const Header: React.FC = () => {
     const location = useLocation();
-
+    const userName = localStorage.getItem("userName");
     const {isAuth, expeditionId} = useSelector(selectUser);
     console.log("*", expeditionId, "*");
 
@@ -59,6 +60,10 @@ const Header: React.FC = () => {
                             </div>
                         )}
                     </Nav>
+
+                    <Navbar.Text>
+                        {userName ? userName : ""}
+                    </Navbar.Text>
                 </Navbar.Collapse>
 
                 {/*<Navbar.Collapse id="basic-navbar-nav" className={"d-flex justify-content-end"}>*/}

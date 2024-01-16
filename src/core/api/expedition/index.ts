@@ -8,7 +8,7 @@ import {
     IGetExpeditionByIdResponse,
     IGetExpeditionsResponse,
 } from "./typing";
-import {logout} from "../auth";
+// import {logout} from "../auth";
 
 export const expApi = axios.create({
     baseURL: "/api/expedition",
@@ -25,9 +25,9 @@ expApi.interceptors.response.use(
         return response;
     },
     (error) => {
-        if (error.response && error.response.status === 401) {
-            logout();
-        }
+        // if (error.response && error.response.status === 401) {
+        //     logout();
+        // }
         return Promise.reject(error);
     }
 );
@@ -48,7 +48,7 @@ export const getExpeditions = async () => {
         } else {
             console.log("unexpected error: ", error);
         }
-        // throw error;
+        throw error;
     }
 };
 
