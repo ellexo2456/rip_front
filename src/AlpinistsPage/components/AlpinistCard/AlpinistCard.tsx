@@ -77,10 +77,10 @@ const AlpinistCard: FC<Props> = ({
                     <span className="my-card__category">{country}</span>
                     <h3 className="my-card__title">{name}</h3>
                     <span className="my-card__by">
-            <a href="#" className="my-card__author" title="author">
-              {lifetime}
-            </a>
-          </span>
+                        <a href="#" className="my-card__author" title="author">
+                          {lifetime}
+                        </a>
+                    </span>
                 </div>
             </article>
             {isAuth && (

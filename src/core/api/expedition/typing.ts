@@ -14,6 +14,7 @@ export interface IExpedition {
   createdAt: string;
   formedAt: string;
   closedAt: string;
+  archived: boolean;
 }
 
 export interface IExpeditionWithAlpinists {
@@ -24,6 +25,7 @@ export interface IExpeditionWithAlpinists {
   createdAt: string;
   formedAt: string;
   closedAt: string;
+  archived: boolean;
   alpinists: IAlpinist[];
 }
 

@@ -48,7 +48,7 @@ export const getExpeditions = async () => {
         } else {
             console.log("unexpected error: ", error);
         }
-        throw error;
+        // throw error;
     }
 };
 

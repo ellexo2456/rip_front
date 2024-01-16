@@ -96,7 +96,6 @@ export const AlpPageForModer = () => {
             <Table striped bordered hover size="sm" className="alps_history_table">
                 <thead>
                 <tr>
-                    <th>#</th>
                     <th>Имя</th>
                     <th>Время жизни</th>
                     <th>Страна</th>
@@ -117,11 +116,10 @@ export const AlpPageForModer = () => {
                                 onClick={() => navigate(`/rip_front/alpinist/${alp.id}`)}
                                 style={{cursor: "pointer"}}
                             >
-                                <td>{index + 1}</td>
                                 <td>{alp.name}</td>
                                 <td>{alp.lifetime}</td>
                                 <td>{alp.country}</td>
-                                <td>{alp.imageRef}</td>
+                                <td className={"image-ref__cell"}>{alp.imageRef}</td>
                                 <td>{alp.description}</td>
                                 <td>{alp.Status}</td>
                                 <td>

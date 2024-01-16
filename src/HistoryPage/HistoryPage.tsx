@@ -12,6 +12,9 @@ import {
     setStatusFilter,
     setUserFilter
 } from "../core/store/requestFilters/actions.tsx";
+import {selectUser} from "../core/store/slices/selectors.ts";
+import {Role} from "../core/store/slices/userSlice.ts";
+import {getRole} from "../core/api/auth";
 
 const emptyDate: string = "0001-01-01T02:30:17+02:30"
 
@@ -27,6 +30,8 @@ export const HistoryPage = () => {
     const status = useSelector((state: RootState) => state.requestFilters.status);
     const user = useSelector((state: RootState) => state.requestFilters.user);
     const [localUser, setLocalUser] = useState(user);
+    const {role} = useSelector(selectUser);
+
 
     const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         dispatch(setStartDateFilter(e.target.value));
@@ -98,6 +103,10 @@ export const HistoryPage = () => {
     };
 
     useEffect(() => {
+        (async () => {
+            await getRole();
+        })()
+
         fetchData(startDate, endDate, status);
     }, [startDate, endDate, status])
 
@@ -121,14 +130,14 @@ export const HistoryPage = () => {
     return (
         <div className="history_page">
             <h1>История Экспедиций</h1>
-            <div style={{margin: '3% 10% 0 10%'}}>
+            {role == Role.ADMIN && <div style={{margin: '3% 10% 0 7%', display: "flex"}}>
                 <div style={{display: 'flex', marginBottom: '1%'}}>
                     <div className='filter'>
-                        <label>Дата начала:</label>
+                        <label className={"me-1 label"}>Дата начала:</label>
                         <input type="date" value={startDate} onChange={handleStartDateChange}/>
                     </div>
                     <div className='filter' style={{marginLeft: '1%'}}>
-                        <label>Дата конца:</label>
+                        <label className={"me-1 label"}>Дата конца:</label>
                         <input type="date" value={endDate} onChange={handleEndDateChange}/>
                     </div>
                     <div className='filter' style={{marginLeft: '1%', marginRight: '1%'}}>
@@ -155,34 +164,42 @@ export const HistoryPage = () => {
                                 type="search"
                                 placeholder="Поиск по имени пользователя"
                                 className="me-2"
+                                style={{minWidth: "270px"}}
                                 aria-label="Search"
                                 value={user}
                                 onChange={handleUserChange}
                             />
                         </Form>
                     </div>
-                    <Button className='filter-button' variant="primary" onClick={() => {
-                        handleResetFilter()
-                    }}>
+                    <Button
+                        className='filter-button'
+                        variant="primary"
+                        onClick={() => {
+                            handleResetFilter()
+                        }}>
                         Сбросить фильтры
                     </Button>
                 </div>
-            </div>
+            </div>}
 
             <Table striped bordered hover size="sm" className="history_table">
                 <thead>
                 <tr>
-                    <th>#</th>
                     <th>Название</th>
                     <th>Год</th>
                     <th>Статус</th>
                     <th>Создание</th>
                     <th>Формирование</th>
                     <th>Завершение</th>
-                    <th>Польователь</th>
-                    <th>Модератор</th>
-                    <th>Завершить</th>
-                    <th>Отклонить</th>
+                    {role == Role.ADMIN && <>
+                        <th>Польователь</th>
+                        <th>Модератор</th>
+                    </>}
+                    <th>Архив</th>
+                    {role == Role.ADMIN && <>
+                        <th>Завершить</th>
+                        <th>Отклонить</th>
+                    </>}
                 </tr>
                 </thead>
                 <tbody>
@@ -195,16 +212,20 @@ export const HistoryPage = () => {
                                 onClick={() => navigate(`/rip_front/missions/${exp.id}`)}
                                 style={{cursor: "pointer"}}
                             >
-                                <td>{index + 1}</td>
                                 <td>{exp.name}</td>
                                 <td>{exp.year}</td>
                                 <td>{exp.status}</td>
                                 <td>{formatDateTime(exp.createdAt)}</td>
                                 <td>{exp.formedAt !== emptyDate ? formatDateTime(exp.formedAt) : "-"}</td>
                                 <td>{exp.closedAt !== emptyDate ? formatDateTime(exp.closedAt) : "-"}</td>
-                                <td>{exp.user?.Email ? exp.user.Email : "-"}</td>
-                                <td>{exp.moderator?.Email ? exp.moderator.Email : "-"}</td>
-                                <td>
+                                {role == Role.ADMIN &&
+                                    <>
+                                        <td>{exp.user?.Email ? exp.user.Email : "-"}</td>
+                                        <td>{exp.moderator?.Email ? exp.moderator.Email : "-"}</td>
+                                    </>
+                                }
+                                <td>{exp.archived ? "да" : "нет"}</td>
+                                {role == Role.ADMIN && <td>
                                     {exp.status == 'завершено' ? "завершено" :
                                         (exp.status == 'отклонено' ? "отклонено" :
                                                 <Button variant="primary" onClick={(e) => {
@@ -215,7 +236,8 @@ export const HistoryPage = () => {
                                                 </Button>
                                         )}
                                 </td>
-                                <td>
+                                }
+                                {role == Role.ADMIN && <td>
                                     {exp.status == 'завершено' ? "завершено" :
                                         (exp.status == 'отклонено' ? "отклонено" :
                                                 <Button variant="danger" onClick={(e) => {
@@ -226,6 +248,7 @@ export const HistoryPage = () => {
                                                 </Button>
                                         )}
                                 </td>
+                                }
                             </tr>
                         );
                     })}

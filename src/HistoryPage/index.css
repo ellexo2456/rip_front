@@ -10,3 +10,17 @@
   flex-direction: column;
   gap: 30px;
 }
+
+.filter {
+  margin-right: 10px;
+  align-items: center;
+  display: flex;
+}
+
+.label {
+  min-width: 100px;
+}
+
+.filter-button {
+  min-width: 200px;
+}

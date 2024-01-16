@@ -1,5 +1,6 @@
 .my-card-wrapper {
     height: 445px;
+    margin-bottom: 85px;
 }
 
 .my-card {
@@ -108,7 +109,8 @@
     margin-top: 30px;
     display: flex;
     width: 100%;
-    justify-items: center;
+    justify-content: center;
     text-align: center;
     padding-left: 26px;
+    max-width: 300px;
 }

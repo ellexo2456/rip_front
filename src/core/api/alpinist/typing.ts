@@ -25,18 +25,16 @@ export interface IChangeAlp {
   name: string;
   lifetime: string;
   country: string;
-  // imageRef: string;
-  // imageName: string;
   description: string;
-  // Status: string;
 }
 
 export interface ICreateAlp {
   name: string;
   lifetime: string;
   country: string;
-  // imageRef: string;
-  // imageName: string;
   description: string;
-  // Status: string;
+}
+
+export interface IAlpId {
+  id: number;
 }

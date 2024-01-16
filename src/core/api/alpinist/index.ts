@@ -1,6 +1,6 @@
 import axios, {isAxiosError} from "axios";
 import {responseBody} from "..";
-import {IGetALpinistsResponse, IGetALpinistsByIdResponse, IChangeAlp, ICreateAlp} from "./typing";
+import {IGetALpinistsResponse, IGetALpinistsByIdResponse, IChangeAlp, ICreateAlp, IAlpId} from "./typing";
 import {logout} from "../auth";
 import {store} from "../../store";
 import {saveExpedition, saveUser} from "../../store/slices/userSlice";
@@ -135,8 +135,11 @@ export const addAlpinistImage = async (body: File, id: number) => {
 
 export const createAlpinist = async (body: ICreateAlp) => {
     try {
-        await alpinistApi.post("alpinist", body);
+        const response: IAlpId = responseBody(
+            await alpinistApi.post("alpinist", body)
+        );
         console.log("core change exp");
+        return response
     } catch (error) {
         if (isAxiosError(error)) {
             console.log(

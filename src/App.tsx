@@ -19,7 +19,7 @@ import {AlpPageForModer} from "./components/AlpPageForModer/AlpPageForModer.tsx"
 
 const App: React.FC = () => {
     useEffect(() => {
-        getExpeditions().then(() => store.dispatch(saveAuth(true)));
+        getExpeditions().then(() => store.dispatch(saveAuth(true))).catch(() => store.dispatch(saveAuth(false)));
     }, []);
 
     return (

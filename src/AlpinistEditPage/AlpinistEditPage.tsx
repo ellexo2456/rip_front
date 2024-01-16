@@ -77,28 +77,32 @@ export const AlpinistEditPage: FC = () => {
         if (isValidForm()) {
             if (id) {
                 if (image) {
-                    console.log(image)
                     await addAlpinistImage(image, Number(id));
                 }
 
-                changeAlpinistById({
+                await changeAlpinistById({
                     id: Number(id),
                     name: name,
                     country: country,
                     description: descr,
                     lifetime: lifetime,
-                }).then(() => {
-                    navigate(`/rip_front/alpinists/editable`);
                 })
+
+                navigate(`/rip_front/alpinists/editable`);
             } else {
-                createAlpinist({
+                const resp = await createAlpinist({
                     name: name,
                     country: country,
                     description: descr,
                     lifetime: lifetime,
-                }).then(() => {
-                    navigate(`/rip_front/alpinists/editable`);
                 })
+
+                if (image) {
+                    console.log(image)
+                    await addAlpinistImage(image, Number(resp.id));
+                }
+
+                navigate(`/rip_front/alpinists/editable`);
 
             }
         }
@@ -154,7 +158,7 @@ export const AlpinistEditPage: FC = () => {
 
                 <Form.Group controlId="formFile" className="mb-3">
                     <Form.Label>Изображение</Form.Label>
-                    <Form.Control type="file" onChange={handleImageChange}/>
+                    <Form.Control type="file" accept="image/*" onChange={handleImageChange}/>
                 </Form.Group>
 
                 <Form.Group className="mb-3">

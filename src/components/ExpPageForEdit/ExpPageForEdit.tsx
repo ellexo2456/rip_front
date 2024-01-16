@@ -19,6 +19,7 @@ interface IExpeditionState {
   createdAt: string;
   formedAt: string;
   closedAt: string;
+  archived: boolean;
   alpinists: IAlpinist[];
 }
 
