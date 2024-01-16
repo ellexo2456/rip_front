@@ -1,15 +1,26 @@
 import "./index.css";
 import React, {useEffect, useState} from "react";
 import {Button, Form, Table} from "react-bootstrap";
-import {getExpeditions} from "../core/api/expedition";
+import {changeExpModerStatus, getExpeditions, getExpeditionsWithFilters} from "../core/api/expedition";
 import {IExpedition} from "../core/api/expedition/typing";
 import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../core/store";
+import {
+    setEndDateFilter,
+    setStartDateFilter,
+    setStatusFilter,
+    setUserFilter
+} from "../core/store/requestFilters/actions.tsx";
 
 const emptyDate: string = "0001-01-01T02:30:17+02:30"
 
 export const HistoryPage = () => {
+    const [expeditions, setExpeditions] = useState<IExpedition[] | undefined>(
+        undefined
+    );
+    const navigate = useNavigate();
+
     const dispatch = useDispatch();
     const startDate = useSelector((state: RootState) => state.requestFilters.startDate);
     const endDate = useSelector((state: RootState) => state.requestFilters.endDate);
@@ -34,15 +45,33 @@ export const HistoryPage = () => {
         dispatch(setUserFilter(e.target.value));
     };
 
-    const [expeditions, setExpeditions] = useState<IExpedition[] | undefined>(
-        undefined
-    );
+    const handleResetFilter = () => {
+        dispatch(setStartDateFilter(''));
+        dispatch(setEndDateFilter(''));
+        dispatch(setStatusFilter(''));
+        dispatch(setUserFilter(''));
+        setLocalUser('')
+        fetchData(startDate, endDate, status)
+    }
 
-    const navigate = useNavigate();
+    const handleChangeStatus = async (id: number, newStatus: string) => {
+        await changeExpModerStatus(id, newStatus)
+        fetchData(startDate, endDate, status)
+    }
 
-    useEffect(() => {
-        getExpeditions().then((data) => setExpeditions(data.expedition.filter((exp) => exp.status !== "черновик")));
-    }, []);
+    const fetchData = (startDate: string, endDate: string, status: string) => {
+        getExpeditionsWithFilters(startDate, endDate, status).then((data) => {
+            let filteredResult = data.expedition
+            filteredResult = data.expedition.filter((exp) => exp.status !== "черновик")
+
+            if (localUser != '') {
+                filteredResult = data.expedition.filter((exp) => exp.user?.Email.includes(localUser)) || data.expedition
+            }
+
+            setExpeditions(filteredResult);
+        })
+    };
+
 
     const formatDateTime = (dateTimeString: string) => {
         const options = {
@@ -56,30 +85,63 @@ export const HistoryPage = () => {
         return new Date(dateTimeString).toLocaleDateString("ru-US", options);
     };
 
+    useEffect(() => {
+        getExpeditions().then((data) => setExpeditions(data.expedition.filter((exp) => exp.status !== "черновик")));
+    }, []);
+
+    const fetchDataWithPolling = async () => {
+        try {
+            fetchData(startDate, endDate, status);
+        } catch (error) {
+            console.error('Error fetching data with polling:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchData(startDate, endDate, status);
+    }, [startDate, endDate, status])
+
+    useEffect(() => {
+        if (localUser != "") {
+            const previos = expeditions
+            setExpeditions(expeditions?.filter((exp) => exp.user?.Email.includes(localUser)) || previos);
+        }
+    }, [localUser])
+
+    useEffect(() => {
+        const pollingInterval = setInterval(() => {
+            fetchDataWithPolling();
+        }, 2000);
+        console.log('get data')
+        return () => clearInterval(pollingInterval);
+
+    }, [startDate, endDate, status, localUser]);
+
+
     return (
         <div className="history_page">
             <h1>История Экспедиций</h1>
-            <div style={{ margin: '3% 10% 0 10%' }}>
-                <div style={{ display: 'flex', marginBottom: '1%' }}>
+            <div style={{margin: '3% 10% 0 10%'}}>
+                <div style={{display: 'flex', marginBottom: '1%'}}>
                     <div className='filter'>
                         <label>Дата начала:</label>
-                        <input type="date" value={startDate} onChange={handleStartDateChange} />
+                        <input type="date" value={startDate} onChange={handleStartDateChange}/>
                     </div>
-                    <div className='filter'style={{ marginLeft: '1%'}}>
+                    <div className='filter' style={{marginLeft: '1%'}}>
                         <label>Дата конца:</label>
-                        <input type="date" value={endDate} onChange={handleEndDateChange} />
+                        <input type="date" value={endDate} onChange={handleEndDateChange}/>
                     </div>
-                    <div className='filter' style={{ marginLeft: '1%', marginRight: '1%' }}>
+                    <div className='filter' style={{marginLeft: '1%', marginRight: '1%'}}>
                         <select value={status} onChange={handleStatusChange}>
                             <option value="">Статус (все)</option>
-                            <option key={"formed"} value={"formed"}>
-                                Сформирована
+                            <option key={"formed"} value={"сформировано"}>
+                                Сформировано
                             </option>
-                            <option key={"rejected"} value={"rejected"}>
-                                Отклонена
+                            <option key={"rejected"} value={"отклонено"}>
+                                Отклонено
                             </option>
-                            <option key={"completed"} value={"completed"}>
-                                Одобрена
+                            <option key={"completed"} value={"завершено"}>
+                                Завершено
                             </option>
                         </select>
                     </div>
@@ -87,11 +149,11 @@ export const HistoryPage = () => {
                         <Form
                             className="d-flex"
                             id="search"
-                            style={{ width: "20%", minWidth: "250px" }}
+                            style={{width: "20%", minWidth: "250px"}}
                         >
                             <Form.Control
                                 type="search"
-                                placeholder="Поиск по имени клиента"
+                                placeholder="Поиск по имени пользователя"
                                 className="me-2"
                                 aria-label="Search"
                                 value={user}
@@ -99,7 +161,9 @@ export const HistoryPage = () => {
                             />
                         </Form>
                     </div>
-                    <Button className='filter-button' variant="primary" onClick={() => { handleResetFilter() }}>
+                    <Button className='filter-button' variant="primary" onClick={() => {
+                        handleResetFilter()
+                    }}>
                         Сбросить фильтры
                     </Button>
                 </div>
@@ -117,6 +181,8 @@ export const HistoryPage = () => {
                     <th>Завершение</th>
                     <th>Польователь</th>
                     <th>Модератор</th>
+                    <th>Завершить</th>
+                    <th>Отклонить</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -137,7 +203,29 @@ export const HistoryPage = () => {
                                 <td>{exp.formedAt !== emptyDate ? formatDateTime(exp.formedAt) : "-"}</td>
                                 <td>{exp.closedAt !== emptyDate ? formatDateTime(exp.closedAt) : "-"}</td>
                                 <td>{exp.user?.Email ? exp.user.Email : "-"}</td>
-                                <td>{exp.moderator?.Email ? exp.moderator.Email : "-" }</td>
+                                <td>{exp.moderator?.Email ? exp.moderator.Email : "-"}</td>
+                                <td>
+                                    {exp.status == 'завершено' ? "завершено" :
+                                        (exp.status == 'отклонено' ? "отклонено" :
+                                                <Button variant="primary" onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleChangeStatus(exp.id, 'завершено')
+                                                }}>
+                                                    Завершить
+                                                </Button>
+                                        )}
+                                </td>
+                                <td>
+                                    {exp.status == 'завершено' ? "завершено" :
+                                        (exp.status == 'отклонено' ? "отклонено" :
+                                                <Button variant="danger" onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleChangeStatus(exp.id, 'отклонено')
+                                                }}>
+                                                    Отклонить
+                                                </Button>
+                                        )}
+                                </td>
                             </tr>
                         );
                     })}

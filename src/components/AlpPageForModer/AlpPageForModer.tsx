@@ -141,12 +141,6 @@ export const AlpPageForModer = () => {
                                                 console.log(response);
                                                 getAlpinists().then((data) => setAlpinists(data.alpinists));
 
-                                                // handleSearch();
-                                                // dispatch(
-                                                //     addNotification({
-                                                //         message: "Альпинист добавлен",
-                                                //     })
-                                                // );
                                             })
                                             .catch((error) => {
                                                 console.error(error);
