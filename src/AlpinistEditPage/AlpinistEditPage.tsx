@@ -1,192 +1,174 @@
 import "./index.css";
-import React, { FC, useState } from "react";
-import { Button, Container } from "react-bootstrap";
+import React, {FC, useEffect, useState} from "react";
+import {Button, Container, Form} from "react-bootstrap";
+import {addAlpinistImage, changeAlpinistById, createAlpinist, getAlpinistById} from "../core/api/alpinist";
+import {useNavigate, useParams} from "react-router-dom";
 
-import { useNavigate } from "react-router-dom";
-import { api } from "../../api/config";
-import { IAlpinist } from "../../core/api/alpinist/typing";
-import { changeExpeditionById } from "../../core/api/expedition";
-import {
-    deleteAlpinistFromExpById,
-    deleteExpeditionById,
-} from "../../core/api/alpinist";
+// import { useNavigate } from "react-router-dom";
+// import { api } from "../api/config";
+// import { changeExpeditionById } from "../core/api/expedition";
+// import {
+//     deleteAlpinistFromExpById,
+//     deleteExpeditionById,
+// } from "../core/api/alpinist";
 
-interface IExpeditionState {
-    year: string;
+export interface IAlpinistState {
     id: number;
     name: string;
-    status: string;
-    createdAt: string;
-    formedAt: string;
-    closedAt: string;
-    alpinists: IAlpinist[];
+    lifetime: string;
+    country: string;
+    // imageRef: string;
+    // imageName: string;
+    description: string;
+    // Status: string;
 }
 
-interface ExpPageForEditProps {
-    expedition: IExpeditionState | undefined;
-    setExpedition: (value: IExpeditionState | undefined) => void;
-    requestHandler: () => void;
-}
 
-export const AlpinistEditPage: FC<ExpPageForEditProps> = (props) => {
-    const { expedition, setExpedition, requestHandler } = props;
-    const [yearError, setYearError] = useState(false);
+export const AlpinistEditPage: FC = () => {
+    const [name, setName] = useState("")
+    const [country, setCountry] = useState("")
+    const [lifetime, setLifetime] = useState("")
+    const [descr, setDescr] = useState("")
+    const [image, setImage] = useState<File | null>(null);
+
+    // const { alpinist, setAlpinist, requestHandler } = props;
+    // const [yearError, setYearError] = useState(false);
     const [nameError, setNameError] = useState(false);
-
     const navigate = useNavigate();
+    const {id} = useParams();
 
-    const handleSubmitMission = () => {
-        if (isValidForm() && !!expedition) {
-            api
-                .put(`/api/expedition/status/form/${expedition.id}`, {
-                    status: "сформировано",
-                })
-                .then((response) => {
-                    console.log(response);
-                    setExpedition(undefined);
-                    navigate("/rip_front");
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
-        }
-    };
-
-    const handleDeleteExpedition = () => {
-        if (expedition?.id) {
-            deleteExpeditionById(expedition.id).then(() => {
-                navigate("/rip_front");
+    useEffect(() => {
+        if (id) {
+            getAlpinistById(id).then((data) => {
+                setName(data.alpinist?.name)
+                setCountry(data.alpinist?.country)
+                setDescr(data.alpinist?.description)
+                setLifetime(data.alpinist?.lifetime)
             });
         }
-    };
-
-    const handleDeleteAlp = (id: number) => {
-        deleteAlpinistFromExpById(id);
-        requestHandler();
-    };
+    }, []);
+    // const handleDeleteExpedition = () => {
+    //     if (expedition?.id) {
+    //         deleteExpeditionById(expedition.id).then(() => {
+    //             navigate("/rip_front");
+    //         });
+    //     }
+    // };
+    //
+    // const handleDeleteAlp = (id: number) => {
+    //     deleteAlpinistFromExpById(id);
+    //     requestHandler();
+    // };
 
     const isValidForm = (): boolean => {
         let isValid = true;
-        if (!Number(expedition?.year) && expedition?.year !== "0") {
-            setYearError(true);
-            isValid = false;
-        }
-        if (!expedition?.name) {
+        // if (!Number(expedition?.year) && expedition?.year !== "0") {
+        //     setYearError(true);
+        //     isValid = false;
+        // }
+        if (!name) {
             setNameError(true);
             isValid = false;
         }
         return isValid;
     };
 
-    const handleChangeExpedition = () => {
+    const handleEdit = async () => {
         if (isValidForm()) {
-            changeExpeditionById({
-                name: expedition?.name || "",
-                year: Number(expedition?.year || 0),
-                id: expedition?.id || 0,
-            });
+            if (id) {
+                if (image) {
+                    console.log(image)
+                    await addAlpinistImage(image, Number(id));
+                }
+
+                changeAlpinistById({
+                    id: Number(id),
+                    name: name,
+                    country: country,
+                    description: descr,
+                    lifetime: lifetime,
+                }).then(() => {
+                    navigate(`/rip_front/alpinists/editable`);
+                })
+            } else {
+                createAlpinist({
+                    name: name,
+                    country: country,
+                    description: descr,
+                    lifetime: lifetime,
+                }).then(() => {
+                    navigate(`/rip_front/alpinists/editable`);
+                })
+
+            }
         }
-    };
+    }
 
     const handleChangeName = (e: React.ChangeEvent<HTMLInputElement>) => {
         setNameError(false);
-        const name = e.target.value;
-        setExpedition({ ...expedition, name } as IExpeditionState);
+
+        // const name = e.target.value;
+        setName(e.target.value)
+        // setExpedition({ ...expedition, name } as IExpeditionState);
     };
 
-    const handleChangeYear = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setYearError(false);
-        const year = e.target.value;
-        setExpedition({ ...expedition, year } as IExpeditionState);
+    const handleChangeCountry = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setCountry(e.target.value)
     };
+    const handleChangeDescr = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setDescr(e.target.value)
+    };
+    const handleChangeLifetime = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setLifetime(e.target.value)
+    };
+
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        setImage(file || null);
+    };
+    //
+    // const handleChangeYear = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //     setYearError(false);
+    //     const year = e.target.value;
+    //     setExpedition({ ...expedition, year } as IExpeditionState);
+    // };
 
     return (
         <Container className="exp_page">
-            {expedition && expedition?.status && (
-                <>
-                    <div
-                        key={expedition.id}
-                        style={{
-                            display: "flex",
-                            flexDirection: "row",
-                            width: "100%",
-                            justifyContent: "space-between",
-                            backgroundColor: "#D2DBDD",
-                            padding: "10px",
-                            borderRadius: "10px",
-                            marginTop: "20px",
-                        }}
-                    >
-                        <div
-                            style={{
-                                display: "flex",
-                                flexDirection: "column",
-                                alignItems: "start",
-                            }}
-                        >
-                            <div className="input_element">
-                                <h3>Название:</h3>
-                                <input
-                                    style={{ border: nameError ? "2px solid red" : "" }}
-                                    type="text"
-                                    value={expedition.name}
-                                    onChange={handleChangeName}
-                                />
-                            </div>
-                            <div className="input_element">
-                                <p>Год:</p>
-                                <input
-                                    style={{ border: yearError ? "2px solid red" : "" }}
-                                    type="text"
-                                    value={expedition.year}
-                                    onChange={handleChangeYear}
-                                />
-                            </div>
-                        </div>
-                        <div
-                            style={{
-                                display: "flex",
-                                flexDirection: "column",
-                                alignItems: "end",
-                            }}
-                        >
-                            <Button
-                                variant="primary"
-                                onClick={() => {
-                                    handleChangeExpedition();
-                                }}
-                            >
-                                Сохранить
-                            </Button>
-                        </div>
-                    </div>
-                    {expedition.alpinists && expedition.alpinists.length &&
-                        expedition.alpinists.map((alp, index) => (
-                            <div className="alpenist_item" key={index}>
-                                <p>{alp.name}</p>
-                                <Button
-                                    variant="danger"
-                                    onClick={() => handleDeleteAlp(alp.id)}
-                                >
-                                    Удалить
-                                </Button>
-                            </div>
-                        ))}
-                </>
-            )}
-            <div
-                style={{
-                    display: "flex",
-                    alignItems: "center",
-                    marginTop: "20px",
-                    gap: "20px",
-                }}
-            >
-                <Button onClick={handleSubmitMission}>Сформировать экспедицию</Button>
-                <Button variant="danger" onClick={handleDeleteExpedition}>
-                    Удалить экспедицию
-                </Button>
-            </div>
+            <Form>
+                <Form.Group className="mb-3">
+                    <Form.Label>Имя</Form.Label>
+                    <Form.Control type="text" defaultValue={name} style={{border: nameError ? "2px solid red" : ""}}
+                                  onChange={handleChangeName}/>
+                </Form.Group>
+
+                <Form.Group className="mb-3">
+                    <Form.Label>Время жизни</Form.Label>
+                    <Form.Control type="text" defaultValue={lifetime} onChange={handleChangeLifetime}/>
+                </Form.Group>
+
+                <Form.Group className="mb-3">
+                    <Form.Label>Страна</Form.Label>
+                    <Form.Control type="text" defaultValue={country} onChange={handleChangeCountry}/>
+                </Form.Group>
+
+                <Form.Group controlId="formFile" className="mb-3">
+                    <Form.Label>Изображение</Form.Label>
+                    <Form.Control type="file" onChange={handleImageChange}/>
+                </Form.Group>
+
+                <Form.Group className="mb-3">
+                    <Form.Label>Описание</Form.Label>
+                    <Form.Control as="textarea" rows={Math.max(10, descr?.split('\n').length)} defaultValue={descr}
+                                  onChange={handleChangeDescr}/>
+                </Form.Group>
+            </Form>
+
+            <Button variant="primary" onClick={() => {
+                handleEdit();
+            }}>
+                Сохранить
+            </Button>
         </Container>
     );
 };

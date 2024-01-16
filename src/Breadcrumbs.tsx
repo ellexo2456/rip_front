@@ -24,6 +24,12 @@ const Breadcrumbs: React.FC = () => {
                     const routeTo = `/${pathnames.slice(0, index + 1).join('/')}`;
                     const isLast = index === pathnames.length - 1;
 
+                    if (name == "edit") {
+                        name = "редактирование"
+                    }
+                    if (name == "create") {
+                        name = "создание"
+                    }
                     return isLast || name == 'alpinist' ? (
                         <Breadcrumb.Item active key={name}>
                             {name.replace(/alpinist/g, 'альпинист')}

@@ -11,8 +11,8 @@ import {IAlpinist} from "../core/api/alpinist/typing";
 import {saveSearchName} from "../core/store/slices/appSlice";
 import {getAlpinists} from "../core/api/alpinist";
 import {Role} from "../core/store/slices/userSlice.ts";
-import {AlpPageForModer} from "../components/AlpPageForModer/AlpPageForModer.tsx";
 import {getRole} from "../core/api/auth";
+import {Link} from "react-router-dom";
 
 // import {deleteAlpinist} from "./modules/delete-alpinist.ts";
 
@@ -36,9 +36,7 @@ const AlpinistsPage: FC = () => {
         handleSearch();
     }, []);
 
-    return role == Role.ADMIN ? (
-        <AlpPageForModer/>
-    ) : (
+    return (
         <div>
             <Helmet>
                 <style>
@@ -49,6 +47,12 @@ const AlpinistsPage: FC = () => {
             </Helmet>
 
             <div className={`my-container ${loading && "containerLoading"}`}>
+                {role == Role.ADMIN && (
+                    <Link to={"/rip_front/alpinists/editable"} className={"mb-2"}>
+                        Перейти в режим редактирования
+                    </Link>
+                )}
+
                 {loading && (
                     <div className="loadingBg">
                         <Spinner animation="border"/>

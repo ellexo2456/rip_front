@@ -1,11 +1,12 @@
-.history_table {
+.alps_history_table {
   width: 100%;
   margin-inline: auto;
   height: min-content;
 }
 
-.history_page {
+.alps_history_page {
   padding: 50px;
+  padding-top: 20px;
   display: flex;
   flex-direction: column;
   gap: 30px;

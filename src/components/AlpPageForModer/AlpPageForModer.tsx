@@ -6,13 +6,14 @@ import {IAlpinist} from "../../core/api/alpinist/typing";
 import {useDispatch, useSelector} from "../../core/store";
 import {selectApp} from "../../core/store/slices/selectors";
 
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {getAlpinists} from "../../core/api/alpinist";
 import {api} from "../../api/config.ts";
 import InputField from "../../AlpinistsPage/components/InputField/InputField.tsx";
 import {saveSearchName} from "../../core/store/slices/appSlice.ts";
 
 export const AlpPageForModer = () => {
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
     const {searchName} = useSelector(selectApp);
@@ -30,7 +31,6 @@ export const AlpPageForModer = () => {
         // setAlpinists(alpinists);
     };
 
-    const navigate = useNavigate();
 
     useEffect(() => {
         getAlpinists().then((data) => setAlpinists(data.alpinists));
@@ -66,7 +66,11 @@ export const AlpPageForModer = () => {
     // };
 
     return (
-        <div className="history_page">
+        <div className="alps_history_page">
+            <Link to={"/rip_front"}>
+                Выйти из режима редактирования
+            </Link>
+
             <div className={`${loading && "containerLoading"}"`}>
                 {loading && (
                     <div className="loadingBg">
@@ -89,7 +93,7 @@ export const AlpPageForModer = () => {
             </div>
 
             <h1>Альпинисты</h1>
-            <Table striped bordered hover size="sm" className="history_table">
+            <Table striped bordered hover size="sm" className="alps_history_table">
                 <thead>
                 <tr>
                     <th>#</th>
@@ -99,6 +103,7 @@ export const AlpPageForModer = () => {
                     <th>Изображение</th>
                     <th>Описание</th>
                     <th>Статус</th>
+                    <th>Редактирование</th>
                     <th>Удаление</th>
                 </tr>
                 </thead>
@@ -119,6 +124,14 @@ export const AlpPageForModer = () => {
                                 <td>{alp.imageRef}</td>
                                 <td>{alp.description}</td>
                                 <td>{alp.Status}</td>
+                                <td>
+                                    <Button variant="primary" style={{width: "min-content"}} onClick={(e) => {
+                                        e.stopPropagation();
+                                        navigate("/rip_front/alpinist/" + alp.id + "/edit");
+                                    }}>
+                                        Редактировать
+                                    </Button>
+                                </td>
                                 <td>
                                     <Button variant="danger" style={{width: "min-content"}} onClick={(e) => {
                                         e.stopPropagation();
@@ -145,6 +158,11 @@ export const AlpPageForModer = () => {
                             </tr>
                         );
                     })}
+                <Button variant="primary" className={"mt-3 mb-5"} onClick={() => {
+                    navigate("/rip_front/alpinist/create");
+                }}>
+                    Добавить
+                </Button>
                 </tbody>
             </Table>
         </div>

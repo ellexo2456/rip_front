@@ -19,3 +19,24 @@ export interface IAlpinist {
 export interface IGetALpinistsByIdResponse {
   alpinist: IAlpinist;
 }
+
+export interface IChangeAlp {
+  id: number;
+  name: string;
+  lifetime: string;
+  country: string;
+  // imageRef: string;
+  // imageName: string;
+  description: string;
+  // Status: string;
+}
+
+export interface ICreateAlp {
+  name: string;
+  lifetime: string;
+  country: string;
+  // imageRef: string;
+  // imageName: string;
+  description: string;
+  // Status: string;
+}
