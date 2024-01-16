@@ -10,6 +10,7 @@ export interface IExpedition {
   status: string;
   year: number;
   user: IUser;
+  moderator: IUser;
   createdAt: string;
   formedAt: string;
   closedAt: string;

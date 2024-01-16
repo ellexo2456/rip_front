@@ -6,11 +6,13 @@ import {
   useSelector as useReduxSelector,
 } from "react-redux";
 import { appSlice } from './slices/appSlice';
+import {requestFilterReducer} from "./requestFilters/reducers.tsx";
 
 const rootReducer = combineReducers({
   user: userSlice.reducer,
   app: appSlice.reducer,
-})
+  // filterAndActiveId: filterAndActiveIdReducer,
+  requestFilters: requestFilterReducer,})
 
 export const store = configureStore({
   reducer: rootReducer,
