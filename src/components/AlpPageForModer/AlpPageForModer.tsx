@@ -117,7 +117,7 @@ export const AlpPageForModer = () => {
                                 style={{cursor: "pointer"}}
                             >
                                 <td>{alp.name}</td>
-                                <td>{alp.lifetime}</td>
+                                <td> {!((alp.lifetime.split("-"))[1].trim()) && ((alp.lifetime.split("-"))[0].trim()) ? (alp.lifetime.split("-"))[0] + " - нн" : alp.lifetime}</td>
                                 <td>{alp.country}</td>
                                 <td className={"image-ref__cell"}>{alp.imageRef}</td>
                                 <td>{alp.description}</td>

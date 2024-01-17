@@ -16,7 +16,7 @@ export const LoginPage = () => {
         if (!login.email || !login.password) {
             return;
         }
-        loginUser(login).then(() => navigate("/rip_front/"));
+        loginUser(login).then(() => navigate("/rip_front"));
     };
 
     return (

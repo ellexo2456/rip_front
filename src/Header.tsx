@@ -61,7 +61,7 @@ const Header: React.FC = () => {
                         {userName ? userName : ""}
                     </Navbar.Text>
 
-                    <Nav className={"gap-2"}>
+                    <Nav className={"gap-3"}>
                         {!isAuth ? (
                             <>
                                 <NavLink className="dropdown-item" to="/rip_front/login">

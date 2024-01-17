@@ -60,6 +60,7 @@ const AlpinistCard: FC<Props> = ({
                 console.error(error);
             });
     };
+
     return (
         <div className="my-card-wrapper">
             <article className="my-card">
@@ -78,7 +79,7 @@ const AlpinistCard: FC<Props> = ({
                     <h3 className="my-card__title">{name}</h3>
                     <span className="my-card__by">
                         <a href="#" className="my-card__author" title="author">
-                          {lifetime}
+                          {!((lifetime.split("-"))[1].trim()) && ((lifetime.split("-"))[0].trim()) ? (lifetime.split("-"))[0] + " - нн" : lifetime}
                         </a>
                     </span>
                 </div>

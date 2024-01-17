@@ -16,7 +16,7 @@ export const RegisterPage = () => {
         if (!login.email || !login.password) {
             return;
         }
-        registerUser(login).then(() => navigate("/rip_front/"));
+        registerUser(login).then(() => navigate("/rip_front"));
     };
 
     return (
