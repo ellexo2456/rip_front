@@ -7,6 +7,7 @@ import {NavLink} from "react-router-dom";
 import {useSelector} from "./core/store";
 import {selectUser} from "./core/store/slices/selectors";
 import {logout} from "./core/api/auth";
+import {Helmet} from "react-helmet";
 
 
 const Header: React.FC = () => {
@@ -17,6 +18,14 @@ const Header: React.FC = () => {
 
     return (
         <Navbar expand="sm" className="bg-warning-subtle">
+            <Helmet>
+                <style>
+                    {
+                        "body { font-family: 'Roboto Slab', serif; background-color: #D2DBDD; }"
+                    }
+                </style>
+            </Helmet>
+
             <Container>
                 <Navbar.Brand>
                     <Link to={"/rip_front"}>AlpLib</Link>
