@@ -134,15 +134,15 @@ export const HistoryPage = () => {
                 <div style={{display: 'flex', marginBottom: '1%'}}>
                     <div className='filter'>
                         <label className={"me-1 label"}>Дата начала:</label>
-                        <input type="date" value={startDate} onChange={handleStartDateChange}/>
+                        <input className={"ps-2"} type="date" value={startDate} onChange={handleStartDateChange}/>
                     </div>
                     <div className='filter' style={{marginLeft: '1%'}}>
                         <label className={"me-1 label"}>Дата конца:</label>
-                        <input type="date" value={endDate} onChange={handleEndDateChange}/>
+                        <input className={"ps-2"} type="date" value={endDate} onChange={handleEndDateChange}/>
                     </div>
-                    <div className='filter' style={{marginLeft: '1%', marginRight: '1%'}}>
-                        <select value={status} onChange={handleStatusChange}>
-                            <option value="">Статус (все)</option>
+                    <div className={'filter'}  style={{marginLeft: '2%', marginRight: '2%'}}>
+                        <select className={"p-1"} value={status} onChange={handleStatusChange}>
+                            <option  value="">Статус (все)</option>
                             <option key={"formed"} value={"сформировано"}>
                                 Сформировано
                             </option>

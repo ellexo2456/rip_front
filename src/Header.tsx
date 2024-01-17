@@ -34,23 +34,6 @@ const Header: React.FC = () => {
                 <Navbar.Toggle aria-controls="basic-navbar-nav"/>
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto gap-2">
-                        {!isAuth ? (
-                            <>
-                                <NavLink className="dropdown-item" to="/rip_front/login">
-                                    Логин
-                                </NavLink>
-                                <NavLink className="dropdown-item" to="/rip_front/register">
-                                    Регистрация
-                                </NavLink>
-                            </>
-                        ) : (
-                            <Button style={{width: "min-content"}} onClick={async () => {
-                                await logout();
-                                navigate("/rip_front");
-                            }}>
-                                Выйти
-                            </Button>
-                        )}
                         {isAuth && (
                             <div
                                 style={{display: "flex", alignItems: "center", gap: "8px"}}
@@ -74,9 +57,30 @@ const Header: React.FC = () => {
                         )}
                     </Nav>
 
-                    <Navbar.Text>
+                    <Navbar.Text className={"me-3"}>
                         {userName ? userName : ""}
                     </Navbar.Text>
+
+                    <Nav className={"gap-2"}>
+                        {!isAuth ? (
+                            <>
+                                <NavLink className="dropdown-item" to="/rip_front/login">
+                                    Логин
+                                </NavLink>
+                                <NavLink className="dropdown-item" to="/rip_front/register">
+                                    Регистрация
+                                </NavLink>
+                            </>
+                        ) : (
+                            <Button style={{width: "min-content"}} onClick={async () => {
+                                await logout();
+                                navigate("/rip_front");
+                            }}>
+                                Выйти
+                            </Button>
+                        )}
+                    </Nav>
+
                 </Navbar.Collapse>
 
                 {/*<Navbar.Collapse id="basic-navbar-nav" className={"d-flex justify-content-end"}>*/}
