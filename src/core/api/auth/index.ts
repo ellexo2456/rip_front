@@ -41,6 +41,7 @@ export const loginUser = async (userData: IUserAuthData) => {
       ...userData,
       password: hashedPassword,
     });
+    localStorage.setItem("userName", userData.email);
     store.dispatch(saveAuth(true));
   } catch (error) {
     if (isAxiosError(error)) {
@@ -63,6 +64,7 @@ export const registerUser = async (userData: IUserAuthData) => {
       ...userData,
       password: hashedPassword,
     });
+    localStorage.setItem("userName", userData.email);
     store.dispatch(saveAuth(true));
   } catch (error) {
     if (isAxiosError(error)) {
@@ -79,6 +81,7 @@ export const logout = async () => {
     await authApi.post("/logout");
     store.dispatch(refreshApp());
     store.dispatch(refreshUser());
+    localStorage.removeItem("userName");
   } catch (error) {
     if (isAxiosError(error)) {
       console.log("error message: ", error.message);

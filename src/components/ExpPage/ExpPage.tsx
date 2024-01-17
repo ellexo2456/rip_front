@@ -31,7 +31,7 @@ export const ExpPage: FC<ExpPageProps> = (props) => {
               flexDirection: "row",
               width: "100%",
               justifyContent: "space-between",
-              backgroundColor: "#D2DBDD",
+              backgroundColor: "#868686",
               padding: "10px",
               borderRadius: "10px",
               marginTop: "20px",
