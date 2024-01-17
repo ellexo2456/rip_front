@@ -2,7 +2,7 @@ import {Button, Navbar} from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import "./header.css";
-import {Link, useLocation} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import {NavLink} from "react-router-dom";
 import {useSelector} from "./core/store";
 import {selectUser} from "./core/store/slices/selectors";
@@ -12,6 +12,7 @@ import {Helmet} from "react-helmet";
 const Header: React.FC = () => {
     const location = useLocation();
     const userName = localStorage.getItem("userName");
+    const navigate = useNavigate();
 
     const {isAuth, expeditionId} = useSelector(selectUser);
     console.log("*", expeditionId, "*");
@@ -44,7 +45,10 @@ const Header: React.FC = () => {
                                 </NavLink>
                             </>
                         ) : (
-                            <Button style={{width: "min-content"}} onClick={logout}>
+                            <Button style={{width: "min-content"}} onClick={async () => {
+                                await logout();
+                                navigate("/rip_front");
+                            }}>
                                 Выйти
                             </Button>
                         )}
