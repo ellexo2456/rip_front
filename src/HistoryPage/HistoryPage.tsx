@@ -173,7 +173,7 @@ export const HistoryPage = () => {
                     </div>
                     <Button
                         className='filter-button'
-                        variant="primary"
+                        variant="custom"
                         onClick={() => {
                             handleResetFilter()
                         }}>
@@ -224,11 +224,13 @@ export const HistoryPage = () => {
                                         <td>{exp.moderator?.Email ? exp.moderator.Email : "-"}</td>
                                     </>
                                 }
-                                <td>{exp.archived ? "да" : "нет"}</td>
+                                <td>{exp.archived ? "да" : (exp.archived === null ? "-" : "нет")}</td>
                                 {role == Role.ADMIN && <td>
                                     {exp.status == 'завершено' ? "завершено" :
                                         (exp.status == 'отклонено' ? "отклонено" :
-                                                <Button variant="primary" onClick={(e) => {
+                                                <Button
+                                                    variant="custom3"
+                                                    onClick={(e) => {
                                                     e.stopPropagation();
                                                     handleChangeStatus(exp.id, 'завершено')
                                                 }}>
@@ -240,7 +242,9 @@ export const HistoryPage = () => {
                                 {role == Role.ADMIN && <td>
                                     {exp.status == 'завершено' ? "завершено" :
                                         (exp.status == 'отклонено' ? "отклонено" :
-                                                <Button variant="danger" onClick={(e) => {
+                                                <Button
+                                                    variant="danger"
+                                                    onClick={(e) => {
                                                     e.stopPropagation();
                                                     handleChangeStatus(exp.id, 'отклонено')
                                                 }}>

@@ -85,7 +85,10 @@ const AlpinistCard: FC<Props> = ({
                 </div>
             </article>
             {isAuth && (
-                <Button className="primary my-card__add-button" onClick={handleAddToExpidition}>
+                <Button
+                    variant={"custom2"}
+                    className="primary my-card__add-button"
+                    onClick={handleAddToExpidition}>
                     Добавить в экспедицию
                 </Button>
             )}

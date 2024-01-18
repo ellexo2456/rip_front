@@ -15,3 +15,28 @@
     background-color: #ea4c89 !important;
     color: #D2DBDD !important;
 }
+
+.btn-custom:hover {
+    background-color: #de2b6f !important;
+    color: #D2DBDD !important;
+}
+
+.btn-custom2 {
+    background-color: #86B32D !important;
+    color: #D2DBDD !important;
+}
+
+.btn-custom2:hover {
+    background-color: #729821 !important;
+    color: #D2DBDD !important;
+}
+
+.btn-custom3 {
+    background-color: #98e101 !important;
+    color: #ffffff !important;
+}
+
+.btn-custom3:hover {
+    background-color: #80bd00 !important;
+    color: #ffffff !important;
+}

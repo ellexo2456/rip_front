@@ -48,6 +48,8 @@ export const AlpinistEditPage: FC = () => {
                 setCountry(data.alpinist?.country)
                 setDescr(data.alpinist?.description)
                 setLifetime(data.alpinist?.lifetime)
+                setBirthDate(data.alpinist?.lifetime.split("-")[0]?.trim())
+                setDeathDate(data.alpinist?.lifetime.split("-")[1]?.trim())
             });
         }
     }, []);

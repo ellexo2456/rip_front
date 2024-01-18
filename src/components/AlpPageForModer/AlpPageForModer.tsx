@@ -120,39 +120,48 @@ export const AlpPageForModer = () => {
                                 <td> {!((alp.lifetime.split("-"))[1].trim()) && ((alp.lifetime.split("-"))[0].trim()) ? (alp.lifetime.split("-"))[0] + " - нн" : alp.lifetime}</td>
                                 <td>{alp.country}</td>
                                 <td className={"image-ref__cell"}>{alp.imageRef}</td>
-                                <td>{alp.description}</td>
+                                <td className={"descr-ref__cell"}>{alp.description}</td>
                                 <td>{alp.Status}</td>
                                 <td>
-                                    <Button variant="primary" style={{width: "min-content"}} onClick={(e) => {
-                                        e.stopPropagation();
-                                        navigate("/rip_front/alpinist/" + alp.id + "/edit");
-                                    }}>
+                                    <Button
+                                        variant="custom3"
+                                        style={{width: "min-content"}}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            navigate("/rip_front/alpinist/" + alp.id + "/edit");
+                                        }}>
                                         Редактировать
                                     </Button>
                                 </td>
                                 <td>
-                                    <Button variant="danger" style={{width: "min-content"}} onClick={(e) => {
-                                        e.stopPropagation();
-                                        api
-                                            .delete(`/api/alpinist/${Number(alp.id)}`)
-                                            .then((response) => {
-                                                console.log(response);
-                                                getAlpinists().then((data) => setAlpinists(data.alpinists));
+                                    <Button
+                                        variant="danger"
+                                        style={{width: "min-content"}}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            api
+                                                .delete(`/api/alpinist/${Number(alp.id)}`)
+                                                .then((response) => {
+                                                    console.log(response);
+                                                    getAlpinists().then((data) => setAlpinists(data.alpinists));
 
-                                            })
-                                            .catch((error) => {
-                                                console.error(error);
-                                            });
-                                    }}>
+                                                })
+                                                .catch((error) => {
+                                                    console.error(error);
+                                                });
+                                        }}>
                                         Удалить
                                     </Button>
                                 </td>
                             </tr>
                         );
                     })}
-                <Button variant="primary" className={"mt-3 mb-5"} onClick={() => {
-                    navigate("/rip_front/alpinist/create");
-                }}>
+                <Button
+                    variant="custom"
+                    className={"mt-3 mb-5"}
+                    onClick={() => {
+                        navigate("/rip_front/alpinist/create");
+                    }}>
                     Добавить
                 </Button>
                 </tbody>

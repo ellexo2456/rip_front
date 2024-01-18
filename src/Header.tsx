@@ -72,7 +72,7 @@ const Header: React.FC = () => {
                                 </NavLink>
                             </>
                         ) : (
-                            <Button style={{width: "min-content"}} onClick={async () => {
+                            <Button style={{width: "min-content"}} variant={"custom"} onClick={async () => {
                                 await logout();
                                 navigate("/rip_front");
                             }}>

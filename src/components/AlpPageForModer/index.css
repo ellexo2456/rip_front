@@ -13,7 +13,22 @@
 }
 
 .image-ref__cell {
+  /*white-space: nowrap; !* Запретить перенос текста на новую строку *!*/
+  /*overflow: hidden; !* Обрезать текст, выходящий за пределы контейнера *!*/
+  /*text-overflow: ellipsis;*/
+
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 100px;
+  max-width: 200px;
+}
+
+.descr-ref__cell {
+  display: -webkit-box; /* Устанавливаем контейнер блочным контейнером с флексовым форматированием */
+  -webkit-box-orient: vertical; /* Задаем вертикальное форматирование блока */
+  overflow: hidden; /* Обрезать текст, выходящий за пределы контейнера */
+  -webkit-box-decoration-break: clone; /* Применяем стиль переноса строк для каждой линии */
+  line-height: 1.5; /* Задаем высоту строки, чтобы контролировать количество строк перед обрезкой */
+  text-overflow: ellipsis; /* Показывать троеточие для обрезанного текста */
+  -webkit-line-clamp: 5; /* Ограничиваем количество отображаемых строк текста */
+  /*max-height: 7.5em;*/
 }

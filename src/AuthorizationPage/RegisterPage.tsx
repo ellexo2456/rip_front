@@ -63,8 +63,9 @@ export const RegisterPage = () => {
                     type="password"
                 ></input>
                 <Button
+                    variant={"custom"}
                     type="submit"
-                    style={{borderRadius: "10px", padding: "5px", marginTop: "20px", color: "#D2DBDD"}}
+                    style={{borderRadius: "10px", padding: "5px", marginTop: "20px"}}
                 >
                     Зарегестрироваться
                 </Button>
