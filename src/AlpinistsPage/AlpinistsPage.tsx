@@ -19,7 +19,12 @@ const AlpinistsPage: FC = () => {
     const handleSearch = async () => {
         await setLoading(true)
         const {alpinists} = await getAlpinistsByCountry(searchValue)
-        await setAlpinists(alpinists)
+        let filtered = alpinists
+
+        if (searchValue != '') {
+            filtered = alpinists.filter((a) => a.country?.includes(searchValue)) || alpinists
+        }
+        await setAlpinists(filtered)
         await setLoading(false)
     }
 
@@ -29,6 +34,7 @@ const AlpinistsPage: FC = () => {
     //         await handleSearch()
     //     }
     // }
+
 
     useEffect(() => {
         handleSearch()
